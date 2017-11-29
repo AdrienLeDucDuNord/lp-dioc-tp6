@@ -13,5 +13,6 @@ class ArticleStatsLogger
     public function log(Article $article, string $action): void
     {
         // Créer un article stat et le persist.
+
     }
 }

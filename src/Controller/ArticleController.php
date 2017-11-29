@@ -21,24 +21,41 @@ class ArticleController extends Controller
     /**
      * @Route(path="/show/{slug}", name="article_show")
      */
-    public function showAction()
+    public function showAction(ViewArticleHandler $viewArticleHandler)
     {
+        return $this->render('article/show.html.twig');
     }
 
     /**
-     * @Route(path="/new", name="article_new")
+     * @Route(path="/new", name="Article_new")
      */
-    public function newAction()
+    public function newAction(NewArticleHandler $newArticleHandler, Request $request)
     {
         // Seul les auteurs doivent avoir access.
+        if($this->getUser()->isAuthor() == true){
+            $article = new Article();
+            $em = $this->getDoctrine()->getManager();
+            $form = $this->createForm(ArticleType::class, $article);
+            $form->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid())
+            {
+                $newArticleHandler->handle($article);
+                $em->persist($article);
+                $em->flush();
+            }
+            return $this->render("Article/new.html.twig", array("form"=>$form->createView()));
+        }
     }
 
     /**
      * @Route(path="/update/{slug}", name="article_update")
      */
-    public function updateAction()
+    public function updateAction(UpdateArticleHandler $updateArticleHandler)
     {
         // Seul les auteurs doivent avoir access.
+        if($this->getUser()->isAuthor() == true){
+            return $this->render('Article/update.html.twig');
+        }
         // Seul l'auteur de l'article peut le modifier
     }
 }

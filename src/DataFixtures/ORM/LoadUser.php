@@ -21,8 +21,19 @@ class LoadUser extends Fixture
         $password = $this->container->get('security.password_encoder')->encodePassword($user, self::USER_PASSWORD);
         $user->setPassword($password);
 
+        $u1 = new User();
+
+        $u1->setFirstname('Adrien');
+        $u1->setLastname('Leduc');
+        $u1->setEmail('adri@exemple.org');
+
+        $password = $this->container->get('security.password_encoder')->encodePassword($u1, self::USER_PASSWORD);
+        $u1->setPassword($password);
+        $u1->setIsAuthor(true);
+
         $this->addReference('user', $user);
 
+        $manager->persist($u1);
         $manager->persist($user);
         $manager->flush();
     }

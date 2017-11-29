@@ -11,7 +11,10 @@ class NewArticleHandler
 {
     public function handle(Article $article): void
     {
-        // Slugify le titre et ajoute l'utilisateur courant comme auteur de l'article
+        // Avec le token recuperer l'utilisateur
+        $sl = new SlugGenerator();
+        $article->setSlug($sl->generate($article->getTitle()));
+        // ajoute l'utilisateur courant comme auteur de l'article
         // Log également un article stat avec pour action create.
     }
 }

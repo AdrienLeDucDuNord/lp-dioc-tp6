@@ -17,6 +17,9 @@ class ArticleStatController extends Controller
      */
     public function showAction()
     {
+        if($this->getUser()->isAuthor() == true){
+            return $this->render('Article/index.html.twig');
+        }
         // Seul les auteurs doivent avoir access.
     }
 }
